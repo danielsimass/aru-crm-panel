@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base dark-first - Araranguá Basquetebol */
+html,
+body {
+  height: 100%;
+  background-color: #0b0f19; /* neutral-950 */
+  color: #f3f4f6; /* neutral-100 */
+}
+
+#root {
+  height: 100%;
+  background-color: #0b0f19; /* neutral-950 */
+}
+
+/* Scrollbar global: fino, sem setas, cores do tema */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #171717; /* neutral-600 / neutral-900 */
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #171717; /* neutral-900 */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #404040; /* neutral-600 */
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #525252; /* neutral-500 */
+}
+
+*::-webkit-scrollbar-corner {
+  background: #171717;
+}
+
+/* DatePicker tema escuro (react-datepicker) */
+.react-datepicker-popper {
+  z-index: 60;
+}
+
+.react-datepicker-wrapper {
+  display: block;
+  width: 100%;
+}
+
+
+.react-datepicker__input-container {
+  display: block;
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  display: block;
+  width: 100%;
+}
+
+
+/* O calendário via portal deve aparecer normalmente */
+.react-datepicker-popper {
+  z-index: 60;
+}
+
+.datepicker-dark.react-datepicker {
+  font-family: inherit;
+  background: #171717;
+  border: 1px solid #262626;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.datepicker-dark .react-datepicker__header {
+  background: #262626;
+  border-bottom: 1px solid #404040;
+  padding-top: 0.75rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.datepicker-dark .react-datepicker__current-month,
+.datepicker-dark .react-datepicker__day-name {
+  color: #f5f5f5;
+}
+
+.datepicker-dark .react-datepicker__day-name {
+  font-weight: 500;
+}
+
+.datepicker-dark .react-datepicker__month-container {
+  padding: 0.5rem;
+}
+
+.datepicker-dark .react-datepicker__day {
+  color: #e5e5e5;
+}
+
+.datepicker-dark .react-datepicker__day:hover,
+.datepicker-dark .react-datepicker__day--keyboard-selected {
+  background: #404040;
+  color: #f5f5f5;
+  border-radius: 0.375rem;
+}
+
+.datepicker-dark .react-datepicker__day--selected,
+.datepicker-dark .react-datepicker__day--in-selecting-range {
+  background: #3f5399; /* primary-600 - azul da marca */
+  color: #fff;
+  border-radius: 0.375rem;
+}
+
+.datepicker-dark .react-datepicker__day--selected:hover {
+  background: #2f3e75; /* primary-700 - azul mais escuro */
+  color: #fff;
+}
+
+.datepicker-dark .react-datepicker__day--outside-month {
+  color: #525252;
+}
+
+.datepicker-dark .react-datepicker__day--disabled {
+  color: #404040;
+  cursor: not-allowed;
+}
+
+.datepicker-dark .react-datepicker__navigation {
+  top: 0.75rem;
+}
+
+.datepicker-dark .react-datepicker__navigation-icon::before {
+  border-color: #a3a3a3;
+  border-width: 2px 2px 0 0;
+  height: 7px;
+  width: 7px;
+}
+
+.datepicker-dark .react-datepicker__navigation:hover *::before {
+  border-color: #f5f5f5;
+}
+
+.datepicker-dark .react-datepicker__month-dropdown-container--scroll,
+.datepicker-dark .react-datepicker__year-dropdown-container--scroll {
+  background: #262626;
+  border: 1px solid #404040;
+  border-radius: 0.375rem;
+}
+
+.datepicker-dark .react-datepicker__month-option,
+.datepicker-dark .react-datepicker__year-option {
+  color: #e5e5e5;
+}
+
+.datepicker-dark .react-datepicker__month-option:hover,
+.datepicker-dark .react-datepicker__year-option:hover {
+  background: #404040;
+  color: #f5f5f5;
+}
