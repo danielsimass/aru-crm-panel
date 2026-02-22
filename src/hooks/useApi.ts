@@ -14,6 +14,7 @@ interface RequestOptions extends Omit<RequestInit, 'body'> {
 }
 
 export function useApi() {
+  console.log('API_BASE_URL', API_BASE_URL)
   return useMemo(() => {
     const request = async (
       endpoint: string,
