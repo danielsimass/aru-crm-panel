@@ -29,6 +29,12 @@ export function Modal({ open, onClose, title, children, footer, size = 'md' }: M
 
   if (!open) return null
 
+  const sizeClass =
+    size === 'sm' ? 'sm:max-w-sm' :
+    size === 'lg' ? 'sm:max-w-4xl' :
+    size === 'xl' ? 'sm:max-w-6xl' :
+    'sm:max-w-lg'
+
   const content = (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div
@@ -37,15 +43,10 @@ export function Modal({ open, onClose, title, children, footer, size = 'md' }: M
         onClick={onClose}
       />
       <div
-        className={`
-          relative w-full rounded-xl bg-neutral-900 border border-neutral-800 shadow-xl
-          outline outline-1 -outline-offset-1 outline-white/10 max-h-[90vh] flex flex-col
-          sm:max-w-lg
-          max-sm:fixed max-sm:inset-0 max-sm:max-h-none max-sm:rounded-none max-sm:border-0
-          ${size === 'sm' ? 'sm:max-w-sm' : ''}
-          ${size === 'lg' ? 'sm:max-w-4xl' : ''}
-          ${size === 'xl' ? 'sm:max-w-6xl' : ''}
-        `}
+        className={
+          `relative w-full rounded-xl bg-neutral-900 border border-neutral-800 shadow-xl outline outline-1 -outline-offset-1 outline-white/10 max-h-[90vh] flex flex-col max-sm:fixed max-sm:inset-0 max-sm:max-h-none max-sm:rounded-none max-sm:border-0 ` +
+          sizeClass
+        }
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
