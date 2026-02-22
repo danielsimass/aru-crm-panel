@@ -8,7 +8,7 @@ import { getOnUnauthorized } from '../lib/onUnauthorized'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
-interface RequestOptions extends RequestInit {
+interface RequestOptions extends Omit<RequestInit, 'body'> {
   body?: unknown
   params?: Record<string, unknown>
 }

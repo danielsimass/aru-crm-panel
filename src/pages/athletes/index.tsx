@@ -269,7 +269,7 @@ export default function AthletesPage() {
     {
       key: 'isActive',
       label: 'Status',
-      render: (value, row) => (
+      render: (_value, row) => (
         <Badge variant={row.isActive ? 'primary' : 'neutral'}>
           {row.isActive ? 'Ativo' : 'Inativo'}
         </Badge>

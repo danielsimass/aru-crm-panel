@@ -174,13 +174,14 @@ export default function UsersPage() {
           manager: 'Gerente',
           user: 'Usuário',
         }
-        return <span className="text-neutral-300">{roleLabels[value as string] || value}</span>
+        const s = String(value)
+        return <span className="text-neutral-300">{roleLabels[s] ?? s}</span>
       },
     },
     {
       key: 'isActive',
       label: 'Status',
-      render: (value, row) => (
+      render: (_value, row) => (
         <Badge variant={row.isActive ? 'primary' : 'neutral'}>
           {row.isActive ? 'Ativo' : 'Inativo'}
         </Badge>

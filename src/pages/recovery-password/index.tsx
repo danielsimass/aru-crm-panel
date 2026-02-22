@@ -74,7 +74,7 @@ export default function RecoveryPassword() {
       await emailSchema.validate({ email }, { abortEarly: false })
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        setErrors(yupErrorsToFieldErrors(err))
+        setErrors((prev) => ({ ...prev, ...yupErrorsToFieldErrors(err) } as Record<string, string>))
       }
       return
     }
@@ -110,7 +110,7 @@ export default function RecoveryPassword() {
       )
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        setErrors(yupErrorsToFieldErrors(err))
+        setErrors((prev) => ({ ...prev, ...yupErrorsToFieldErrors(err) } as Record<string, string>))
       }
       return
     }
@@ -175,7 +175,7 @@ export default function RecoveryPassword() {
       await codeSchema.validate({ secureCode }, { abortEarly: false })
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        setErrors(yupErrorsToFieldErrors(err))
+        setErrors((prev) => ({ ...prev, ...yupErrorsToFieldErrors(err) } as Record<string, string>))
       }
       return
     }

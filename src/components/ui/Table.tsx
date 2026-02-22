@@ -17,7 +17,7 @@ export interface TableProps<T> {
   emptyMessage?: string
 }
 
-export function Table<T extends Record<string, unknown>>({
+export function Table<T extends object>({
   data,
   columns,
   pagination,
@@ -25,7 +25,7 @@ export function Table<T extends Record<string, unknown>>({
   emptyMessage = 'Nenhum registro encontrado',
 }: TableProps<T>) {
   const renderCell = (column: Column<T>, row: T) => {
-    const value = row[column.key]
+    const value = (row as Record<string, unknown>)[column.key]
     
     if (column.render) {
       return column.render(value, row)

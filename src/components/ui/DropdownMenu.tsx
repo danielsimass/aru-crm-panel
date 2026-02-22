@@ -14,7 +14,7 @@ interface DropdownMenuProps {
 
 export function DropdownMenu({ items, children }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [openUpward, setOpenUpward] = useState(false)
+  const [, setOpenUpward] = useState(false)
   const [coords, setCoords] = useState<{ top: number; left: number }>({
     top: 0,
     left: 0,

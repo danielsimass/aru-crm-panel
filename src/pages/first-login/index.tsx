@@ -51,7 +51,6 @@ export default function FirstLogin() {
 
   const userId = (userIdFromUrl || validatedUserId) ?? ''
   const codeToUse = secureCodeFromUrl || validatedSecureCode
-  const hasValidParams = Boolean(userId && codeToUse)
 
   const handleValidateCode = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -60,7 +59,7 @@ export default function FirstLogin() {
       await validateCodeSchema.validate({ email, secureCode }, { abortEarly: false })
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        setErrors(yupErrorsToFieldErrors(err))
+        setErrors((prev) => ({ ...prev, ...yupErrorsToFieldErrors(err) } as Record<string, string>))
       }
       return
     }
@@ -94,7 +93,7 @@ export default function FirstLogin() {
       await firstLoginSchema.validate({ password, confirmPassword }, { abortEarly: false })
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        setErrors(yupErrorsToFieldErrors(err))
+        setErrors((prev) => ({ ...prev, ...yupErrorsToFieldErrors(err) } as Record<string, string>))
       }
       return
     }
