@@ -1,20 +1,10 @@
 # Stage 1 - Build
-FROM node:24-alpine AS builder
-
+FROM node:24-alpine AS build
 WORKDIR /app
-
-# Instala pnpm global
-RUN npm install -g pnpm
-
-# Copia apenas arquivos de dependência primeiro (melhor cache)
-COPY package.json pnpm-lock.yaml ./
-
-RUN pnpm install --frozen-lockfile
-
-# Copia resto do projeto
+COPY package*.json ./
+RUN npm install
 COPY . .
-
-RUN pnpm build
+RUN npm run build
 
 
 # Stage 2 - Nginx
