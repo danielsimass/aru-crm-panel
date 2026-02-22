@@ -7,8 +7,8 @@ interface ModalProps {
   title: string
   children: ReactNode
   footer?: ReactNode
-  /** sm: 28rem, md: 32rem (padrão), lg: 56rem */
-  size?: 'sm' | 'md' | 'lg'
+  /** sm: 28rem, md: 32rem, lg: 56rem, xl: 72rem */
+  size?: 'sm' | 'md' | 'lg' | 'xl'
 }
 
 
@@ -44,6 +44,7 @@ export function Modal({ open, onClose, title, children, footer, size = 'md' }: M
           max-sm:fixed max-sm:inset-0 max-sm:max-h-none max-sm:rounded-none max-sm:border-0
           ${size === 'sm' ? 'sm:max-w-sm' : ''}
           ${size === 'lg' ? 'sm:max-w-4xl' : ''}
+          ${size === 'xl' ? 'sm:max-w-6xl' : ''}
         `}
         role="dialog"
         aria-modal="true"

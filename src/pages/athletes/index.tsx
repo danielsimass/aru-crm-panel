@@ -444,7 +444,7 @@ export default function AthletesPage() {
         <Modal
           open={modalOpen}
           onClose={handleCloseModal}
-          size="lg"
+          size="xl"
           title={
             modalMode === 'create'
               ? 'Novo atleta'
