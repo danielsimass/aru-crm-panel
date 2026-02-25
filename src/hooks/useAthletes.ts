@@ -24,10 +24,9 @@ export interface AthleteListItem {
 
 export interface AthleteFilters {
   isActive?: boolean
-  minHeight?: number
-  maxHeight?: number
   name?: string
   notes?: string
+  category?: string
 }
 
 export interface PaginationData {
@@ -69,17 +68,14 @@ export function useAthletes(filters: AthleteFilters = {}, page: number = 1, limi
       if (filters.isActive !== undefined) {
         params.isActive = filters.isActive
       }
-      if (filters.minHeight !== undefined) {
-        params.minHeight = filters.minHeight
-      }
-      if (filters.maxHeight !== undefined) {
-        params.maxHeight = filters.maxHeight
-      }
       if (filters.name !== undefined && filters.name.trim() !== '') {
         params.name = filters.name.trim()
       }
       if (filters.notes !== undefined && filters.notes.trim() !== '') {
         params.notes = filters.notes.trim()
+      }
+      if (filters.category !== undefined && filters.category.trim() !== '') {
+        params.category = filters.category.trim()
       }
 
       const response = await api.get('/v1/athletes', params)
@@ -102,7 +98,7 @@ export function useAthletes(filters: AthleteFilters = {}, page: number = 1, limi
     } finally {
       setLoading(false)
     }
-  }, [api, page, limit, filters.isActive, filters.minHeight, filters.maxHeight, filters.name, filters.notes])
+  }, [api, page, limit, filters.isActive, filters.name, filters.notes, filters.category])
 
   useEffect(() => {
     fetchAthletes()

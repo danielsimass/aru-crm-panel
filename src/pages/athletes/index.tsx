@@ -12,14 +12,14 @@ import { Modal } from '../../components/ui/Modal'
 import { AthleteForm, AthleteFormValues, AthleteFormInitialData } from './components/AthleteForm'
 import { useAthletes, AthleteListItem, AthleteFilters } from '../../hooks/useAthletes'
 import { useToast } from '../../hooks/useToast'
+import { useDashboard } from '../../hooks/useDashboard'
 
 export default function AthletesPage() {
   // Estados para os valores dos inputs (não aplicados automaticamente)
   const [statusFilter, setStatusFilter] = useState<string>('')
   const [nameFilter, setNameFilter] = useState<string>('')
   const [notesFilter, setNotesFilter] = useState<string>('')
-  const [minHeight, setMinHeight] = useState<string>('')
-  const [maxHeight, setMaxHeight] = useState<string>('')
+  const [categoryFilter, setCategoryFilter] = useState<string>('')
   
   // Estado para os filtros aplicados (usados na busca)
   const [appliedFilters, setAppliedFilters] = useState<AthleteFilters>({})
@@ -31,6 +31,8 @@ export default function AthletesPage() {
     currentPage,
     itemsPerPage
   )
+
+  const { data: dashboardData } = useDashboard()
 
   const { showToast, ToastContainer } = useToast()
   const location = useLocation()
@@ -151,17 +153,8 @@ export default function AthletesPage() {
     if (notesFilter.trim()) {
       newFilters.notes = notesFilter.trim()
     }
-    if (minHeight.trim()) {
-      const minHeightNum = parseFloat(minHeight)
-      if (!isNaN(minHeightNum)) {
-        newFilters.minHeight = minHeightNum
-      }
-    }
-    if (maxHeight.trim()) {
-      const maxHeightNum = parseFloat(maxHeight)
-      if (!isNaN(maxHeightNum)) {
-        newFilters.maxHeight = maxHeightNum
-      }
+    if (categoryFilter.trim()) {
+      newFilters.category = categoryFilter.trim()
     }
     
     setAppliedFilters(newFilters)
@@ -173,8 +166,7 @@ export default function AthletesPage() {
     setStatusFilter('')
     setNameFilter('')
     setNotesFilter('')
-    setMinHeight('')
-    setMaxHeight('')
+    setCategoryFilter('')
     setAppliedFilters({})
     setCurrentPage(1)
   }
@@ -311,6 +303,11 @@ export default function AthletesPage() {
     { value: 'false', label: 'Inativo' },
   ]
 
+  const categoryOptions = [
+    { value: '', label: 'Todas as categorias' },
+    ...(dashboardData?.athletesByCategory.map((item) => ({ value: item.category, label: item.category })) ?? []),
+  ]
+
   // Toast ao falhar a requisição da tabela
   useEffect(() => {
     if (error) {
@@ -365,29 +362,11 @@ export default function AthletesPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
             options={statusOptions}
           />
-          <Input
-            label="Altura mínima (cm)"
-            type="number"
-            placeholder="Ex: 160"
-            value={minHeight}
-            onChange={(e) => setMinHeight(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSearch()
-              }
-            }}
-          />
-          <Input
-            label="Altura máxima (cm)"
-            type="number"
-            placeholder="Ex: 190"
-            value={maxHeight}
-            onChange={(e) => setMaxHeight(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSearch()
-              }
-            }}
+          <Select
+            label="Categoria"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            options={categoryOptions}
           />
           <div className="flex gap-2">
             <Button onClick={handleSearch} size="sm">
