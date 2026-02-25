@@ -116,11 +116,11 @@ export default function AthletesPage() {
     }
   }
 
-  const handleFormSubmit = async (values: AthleteFormValues) => {
+  const handleFormSubmit = async (values: AthleteFormValues, photoFile: File | null) => {
     setFormError(null)
     const payload = toPayload(values)
     if (modalMode === 'create') {
-      const result = await createAthlete(payload)
+      const result = await createAthlete(payload, photoFile)
       if (result.ok) {
         showToast('Atleta criado com sucesso!', 'success')
         handleCloseModal()
@@ -128,7 +128,7 @@ export default function AthletesPage() {
         setFormError(result.message)
       }
     } else if (selectedAthlete) {
-      const result = await updateAthlete(selectedAthlete.id, payload)
+      const result = await updateAthlete(selectedAthlete.id, payload, photoFile)
       if (result.ok) {
         showToast('Atleta atualizado com sucesso!', 'success')
         handleCloseModal()
@@ -471,6 +471,7 @@ export default function AthletesPage() {
                     weightKg: selectedAthlete.weightKg,
                     dominantHand: selectedAthlete.dominantHand ?? '',
                     notes: selectedAthlete.notes ?? '',
+                    photo: selectedAthlete.photo ?? '',
                   } satisfies AthleteFormInitialData)
                 : undefined
             }

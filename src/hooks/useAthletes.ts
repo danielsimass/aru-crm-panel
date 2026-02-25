@@ -16,6 +16,7 @@ export interface AthleteListItem {
   weightKg: number | null
   dominantHand: string | null
   notes: string | null
+  photo: string | null
   createdAt: string
   updatedAt: string
   category: string
@@ -121,7 +122,7 @@ export function useAthletes(filters: AthleteFilters = {}, page: number = 1, limi
     }
   }, [api, fetchAthletes])
 
-  const createAthlete = async (payload: {
+  type CreatePayload = {
     fullName: string
     birthDate: string
     phone: string
@@ -134,8 +135,25 @@ export function useAthletes(filters: AthleteFilters = {}, page: number = 1, limi
     weightKg?: number
     dominantHand?: string
     notes?: string
-  }) => {
-    const response = await api.post('/v1/athletes', payload)
+  }
+
+  type UpdatePayload = Partial<CreatePayload>
+
+  function buildAthleteFormData(payload: CreatePayload | UpdatePayload, photoFile?: File | null): FormData {
+    const form = new FormData()
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value === undefined || value === null) return
+      form.append(key, String(value))
+    })
+    if (photoFile) {
+      form.append('photo', photoFile)
+    }
+    return form
+  }
+
+  const createAthlete = async (payload: CreatePayload, photoFile?: File | null) => {
+    const formData = buildAthleteFormData(payload, photoFile)
+    const response = await api.post('/v1/athletes', formData)
     if (response.ok) {
       await fetchAthletes()
       return { ok: true as const }
@@ -144,24 +162,9 @@ export function useAthletes(filters: AthleteFilters = {}, page: number = 1, limi
     return { ok: false as const, message: data.message || 'Erro ao criar atleta' }
   }
 
-  const updateAthlete = async (
-    id: string,
-    payload: {
-      fullName?: string
-      birthDate?: string
-      phone?: string
-      guardianName?: string
-      guardianPhone?: string
-      isActive?: boolean
-      email?: string
-      cpf?: string
-      heightCm?: number
-      weightKg?: number
-      dominantHand?: string
-      notes?: string
-    }
-  ) => {
-    const response = await api.patch(`/v1/athletes/${id}`, payload)
+  const updateAthlete = async (id: string, payload: UpdatePayload, photoFile?: File | null) => {
+    const formData = buildAthleteFormData(payload, photoFile)
+    const response = await api.patch(`/v1/athletes/${id}`, formData)
     if (response.ok) {
       await fetchAthletes()
       return { ok: true as const }

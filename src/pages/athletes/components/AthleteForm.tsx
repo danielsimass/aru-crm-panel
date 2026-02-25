@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent, useRef } from 'react'
 import * as yup from 'yup'
 import { Input } from '../../../components/ui/Input'
 import { MaskedInput } from '../../../components/ui/MaskedInput'
@@ -6,6 +6,7 @@ import { DateInput } from '../../../components/ui/DateInput'
 import { Select } from '../../../components/ui/Select'
 import { Textarea } from '../../../components/ui/Textarea'
 import { Button } from '../../../components/ui/Button'
+import { PhotoInput } from '../../../components/ui/PhotoInput'
 import { yupErrorsToFieldErrors } from '../../../lib/validation'
 
 export interface AthleteFormValues {
@@ -127,16 +128,17 @@ function toDateInputValue(dateStr: string | null | undefined): string {
   return d.toISOString().slice(0, 10)
 }
 
-export type AthleteFormInitialData = Partial<Omit<AthleteFormValues, 'heightCm' | 'weightKg' | 'birthDate'>> & {
+export type AthleteFormInitialData = Partial<Omit<AthleteFormValues, 'heightCm' | 'weightKg' | 'birthDate' | 'photo'>> & {
   birthDate?: string
   heightCm?: number | null
   weightKg?: number | null
+  photo?: string | null
 }
 
 interface AthleteFormProps {
   mode: 'create' | 'edit' | 'view'
   initialData?: AthleteFormInitialData
-  onSubmit?: (values: AthleteFormValues) => Promise<void>
+  onSubmit?: (values: AthleteFormValues, photoFile: File | null) => Promise<void>
   onCancel: () => void
   submitError?: string | null
 }
@@ -167,13 +169,17 @@ export function AthleteForm({
       notes: initialData.notes ?? base.notes,
     }
   })
+  const photoFileRef = useRef<File | null>(null)
   const [errors, setErrors] = useState<Partial<Record<keyof AthleteFormValues, string>>>({})
   const [submitting, setSubmitting] = useState(false)
+  const [photoCleared, setPhotoCleared] = useState(false)
 
   const isViewMode = mode === 'view'
 
   useEffect(() => {
+    photoFileRef.current = null
     if (!initialData) return
+    setPhotoCleared(false)
     setValues((prev) => ({
       ...prev,
       fullName: initialData.fullName ?? prev.fullName,
@@ -205,7 +211,7 @@ export function AthleteForm({
     setSubmitting(true)
     setErrors({})
     try {
-      await onSubmit(values)
+      await onSubmit(values, photoFileRef.current)
     } catch {
       // submitError is passed from parent
     } finally {
@@ -216,6 +222,22 @@ export function AthleteForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Foto: destaque no topo, responsivo */}
+        <div className="sm:col-span-2 lg:col-span-3">
+          <PhotoInput
+            label="Foto do atleta"
+            previewUrl={!photoCleared && initialData?.photo ? `${import.meta.env.VITE_API_URL}${initialData.photo}` : undefined}
+            disabled={isViewMode}
+            onChange={(file) => {
+              photoFileRef.current = file
+              if (!file) {
+                setPhotoCleared(true)
+                return
+              }
+              setPhotoCleared(false)
+            }}
+          />
+        </div>
         <div className="sm:col-span-2 lg:col-span-3">
           <Input
             label="Nome completo"
