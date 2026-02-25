@@ -21,20 +21,24 @@ export function useApi() {
     ): Promise<Response> => {
       const { body, headers = {}, params, ...restOptions } = options
 
+      const isFormData = body instanceof FormData
       const config: RequestInit = {
         ...restOptions,
         headers: {
-          'Content-Type': 'application/json',
+          ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
           ...headers,
         },
-        credentials: 'include', // Importante: inclui cookies nas requisições
+        credentials: 'include',
       }
 
-      // Se body for um objeto, converte para JSON
-      if (body && typeof body === 'object') {
-        config.body = JSON.stringify(body)
-      } else if (body) {
-        config.body = body as BodyInit
+      if (body !== undefined && body !== null) {
+        if (isFormData) {
+          config.body = body as BodyInit
+        } else if (typeof body === 'object') {
+          config.body = JSON.stringify(body)
+        } else {
+          config.body = body as BodyInit
+        }
       }
 
       // Construir URL com query params
